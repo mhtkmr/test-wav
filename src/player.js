@@ -32,19 +32,20 @@ export default class Player extends Component {
               .then(()=> {
                   console.log('lolololol');
                   playlist.play();
+                  playlist.initExporter();
                   setTimeout(()=>{playlist.pause()},2000)
 
       console.log(playlist.getEventEmitter());                  
                   // this.ee = playlist.getEventEmitter().__ee__;
                   // console.log(this.ee);
                   
-                  playlist.getEventEmitter().__ee__.startaudiorendering("buffer");
+                  playlist.getEventEmitter().__ee__.startaudiorendering("wav");
                   playlist.getEventEmitter().on("audiorenderingfinished", (type, data) => {
       const rendered = new File([data], "episode.mp3", { type: "audio/mp3" });
       console.log(rendered);
       this.setState({audio: true})
       const downloadUrl= window.URL.createObjectURL(rendered);
-      console.log(downloadUrl );
+      console.log((downloadUrl)=>{} )
       
       return downloadUrl;
               })
