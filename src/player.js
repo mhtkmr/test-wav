@@ -8,7 +8,6 @@ export default class Player extends Component {
         super();
         this.state={
           audio: false,
-          file: null
         }
        
     var playlist = waveformplaylist.init({
@@ -32,8 +31,8 @@ export default class Player extends Component {
               .then(()=> {
                   console.log('lolololol');
                   playlist.play();
-                  playlist.initExporter();
                   setTimeout(()=>{playlist.pause()},2000)
+                  playlist.initExporter();
 
       console.log(playlist.getEventEmitter());                  
                   // this.ee = playlist.getEventEmitter().__ee__;
@@ -45,7 +44,12 @@ export default class Player extends Component {
       console.log(rendered);
       this.setState({audio: true})
       const downloadUrl= window.URL.createObjectURL(rendered);
-      console.log((downloadUrl)=>{} )
+      var parent=document.getElementById("n");
+      var child=document.createElement("a");
+          child.setAttribute('href',downloadUrl);
+          child.setAttribute('download','gg.wav');
+          parent.appendChild(child);
+          child.innerHTML=downloadUrl;
       
       return downloadUrl;
               })
@@ -58,11 +62,9 @@ export default class Player extends Component {
     render() {
       if(this.state.audio){
         return (
-            <div>
-                {/* `{this.displayDownloadLink(this.downloadUrl)}` */}
-                  
-            
-            </div>
+            <div id = "n">
+
+                </div>
         )}
         else{
           return (
