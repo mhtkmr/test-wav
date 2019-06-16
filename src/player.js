@@ -5,26 +5,27 @@ import React, { Component } from "react";
 
 export default class Player extends Component {
   state = {
-    audio: false,
-    playlist: false,
-    data: [
+    
+    playlist: null,
+ }
+  componentWillMount() {
+    const playlist = waveformplaylist.init(
       {
-        src: "music/Ahh.mp3",
-        name: "Ahh"
+        mono: true,
+        container: document.getElementById("root")
       },
-      {
-        src: "music/Almost.mp3",
-        start: 2
-      },
-      {
-        src: "music/Ballad.mp3",
-        start: 4
-      }
-    ]
-  };
-
-  onFile(e) {
-    e.preventDefault();
+      EventEmitter()
+    );
+    this.setState({ playlist });
+  }
+  onPause = () => {
+    this.state.playlist.play();
+  }
+  onPlay = () => {
+    this.state.playlist.pause();
+  }
+  onFile=(e)=> {
+    
     this.initPlaylist();
   }
 
@@ -34,36 +35,31 @@ export default class Player extends Component {
   }
 
   initPlaylist = audio => {
-    const playlist = waveformplaylist.init(
-      {
-        mono: true,
-        container: document.getElementById("root")
-      },
-      EventEmitter()
-    );
+    // const playlist = waveformplaylist.init(
+    //   {
+    //     mono: true,
+    //     container: document.getElementById("root")
+    //   },
+    //   EventEmitter()
+    // );
     try {
-      playlist.load(this.state.data).then(() => {
-        this.setState({ playlist });
+      this.state.playlist.load(this.props.songs).then(() => {
+        // this.setState({ playlist });
         console.log("lolololol");
-        playlist.play();
-        setTimeout(() => {
-          playlist.pause();
-        }, 2000);
-        playlist.initExporter();
+        
+        this.state.playlist.initExporter();
 
-        console.log(playlist.getEventEmitter());
-        // this.ee = playlist.getEventEmitter().__ee__;
-        // console.log(this.ee);
+        this.ee = this.state.playlist.getEventEmitter().__ee__;
 
-        playlist.getEventEmitter().__ee__.startaudiorendering("wav");
-        playlist
+        this.state.playlist.getEventEmitter().__ee__.startaudiorendering("wav");
+        this.state.playlist
           .getEventEmitter()
           .on("audiorenderingfinished", (type, data) => {
             const rendered = new File([data], "episode.mp3", {
               type: "audio/mp3"
             });
             console.log(rendered);
-            this.setState({ audio: true });
+            // this.setState({ audio: true });
             // const downloadUrl = window.URL.createObjectURL(rendered);
             // var parent = document.getElementById("n");
             // var child = document.createElement("a");
@@ -83,11 +79,9 @@ export default class Player extends Component {
   render() {
     return (
       <div>
-        <button
-          onClick={e => {
-            this.onFile().bind(this);
-          }}
-        />
+        
+        {this.initPlaylist()}
+        {this.props.play?this.onPause():this.onPlay()}
       </div>
     );
   }
