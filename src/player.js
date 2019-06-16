@@ -19,10 +19,10 @@ export default class Player extends Component {
     this.setState({ playlist });
   }
   onPause = () => {
-    this.state.playlist.play();
+    this.state.playlist.pause();
   }
   onPlay = () => {
-    this.state.playlist.pause();
+    this.state.playlist.play();
   }
   onFile=(e)=> {
     
@@ -45,7 +45,6 @@ export default class Player extends Component {
     try {
       this.state.playlist.load(this.props.songs).then(() => {
         // this.setState({ playlist });
-        console.log("lolololol");
         
         this.state.playlist.initExporter();
 
@@ -58,7 +57,6 @@ export default class Player extends Component {
             const rendered = new File([data], "episode.mp3", {
               type: "audio/mp3"
             });
-            console.log(rendered);
             // this.setState({ audio: true });
             // const downloadUrl = window.URL.createObjectURL(rendered);
             // var parent = document.getElementById("n");

@@ -22,6 +22,9 @@
 .App-link {
   color: #61dafb;
 }
+.playlist{
+  display: none;
+}
 
 @keyframes App-logo-spin {
   from {
