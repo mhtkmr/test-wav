@@ -5,9 +5,8 @@ import React, { Component } from "react";
 
 export default class Player extends Component {
   state = {
-    
-    playlist: null,
- }
+    playlist: null
+  };
   componentWillMount() {
     const playlist = waveformplaylist.init(
       {
@@ -20,20 +19,25 @@ export default class Player extends Component {
   }
   onPause = () => {
     this.state.playlist.pause();
-  }
+  };
   onPlay = () => {
     this.state.playlist.play();
-  }
-  onFile=(e)=> {
-    
+  };
+  onFile = e => {
     this.initPlaylist();
-  }
+  };
 
   addToPlaylist(file) {
     this.state.playlist.load();
     this.state.playlist.getEventEmitter().__ee__.startaudiorendering("wav");
   }
-
+  addvol = vol => {
+    console.log(this.state.playlist.tracks);
+    this.state.playlist.tracks.map(i => {
+      i.gain = vol;
+    });
+    console.log(this.state.playlist.tracks);
+  };
   initPlaylist = audio => {
     // const playlist = waveformplaylist.init(
     //   {
@@ -45,7 +49,7 @@ export default class Player extends Component {
     try {
       this.state.playlist.load(this.props.songs).then(() => {
         // this.setState({ playlist });
-        
+
         this.state.playlist.initExporter();
 
         this.ee = this.state.playlist.getEventEmitter().__ee__;
@@ -77,9 +81,9 @@ export default class Player extends Component {
   render() {
     return (
       <div>
-        
         {this.initPlaylist()}
-        {this.props.play?this.onPause():this.onPlay()}
+        {!this.props.play ? this.onPause() : this.onPlay()}
+        {this.addvol(this.props.vol)}
       </div>
     );
   }
