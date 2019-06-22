@@ -4,7 +4,7 @@ import Player from "./player";
 export default class Dashboard extends Component {
   state = {
     audio: false,
-    vol: 0.1,
+    isVolChanged: false,
     data: [
       {
         src: "music/Almost.mp3",
@@ -23,15 +23,17 @@ export default class Dashboard extends Component {
     e.preventDefault();
 
     const data = this.state.data;
-    // data.map((i) => {
-    //     i.gain = e.target.value / 100;
-    //     console.log(i.gain);
-
-    // })
-
-    this.setState({ vol: e.target.value / 100 });
+    data.map(i => {
+      i.gain = e.target.value / 100;
+      console.log(i.gain);
+    });
+    this.showIsVolChanged();
+    this.setState({ data });
   };
-
+  showIsVolChanged = () => {
+    const isVolChanged = !this.state.isVolChanged;
+    this.setState({ isVolChanged });
+  };
   addSongs = e => {
     const audio = !this.state.audio;
     this.setState({ audio });
@@ -51,7 +53,8 @@ export default class Dashboard extends Component {
         <Player
           songs={this.state.data}
           play={this.state.audio}
-          vol={this.state.vol}
+          isVolChanged={this.state.isVolChanged}
+          showIsVolChanged={this.showIsVolChanged}
         />
       </div>
     );

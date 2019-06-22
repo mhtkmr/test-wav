@@ -17,6 +17,16 @@ export default class Player extends Component {
     );
     this.setState({ playlist });
   }
+  componentWillUpdate(newProps) {
+    console.log(newProps.songs, this.props.songs);
+
+    if (this.props.isVolChanged) {
+      console.log("dbd");
+
+      this.state.playlist.clear();
+      this.props.showIsVolChanged();
+    }
+  }
   onPause = () => {
     this.state.playlist.pause();
   };
@@ -31,13 +41,7 @@ export default class Player extends Component {
     this.state.playlist.load();
     this.state.playlist.getEventEmitter().__ee__.startaudiorendering("wav");
   }
-  addvol = vol => {
-    console.log(this.state.playlist.tracks);
-    this.state.playlist.tracks.map(i => {
-      i.gain = vol;
-    });
-    console.log(this.state.playlist.tracks);
-  };
+
   initPlaylist = audio => {
     // const playlist = waveformplaylist.init(
     //   {
@@ -83,7 +87,6 @@ export default class Player extends Component {
       <div>
         {this.initPlaylist()}
         {!this.props.play ? this.onPause() : this.onPlay()}
-        {this.addvol(this.props.vol)}
       </div>
     );
   }
